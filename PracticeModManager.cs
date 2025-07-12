@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -146,6 +147,18 @@ namespace SuperliminalPracticeMod
 			{
 				flashLight.gameObject.SetActive(!flashLight.gameObject.activeSelf);
 			}
+
+			if (flashLight.gameObject.active && !noClip)
+			{
+				if (Input.GetKey(KeyCode.LeftShift))
+					flashLight.GetComponent<Light>().intensity += Input.mouseScrollDelta.y * 0.1f;
+
+				else if (Input.GetKey(KeyCode.LeftControl))
+					flashLight.GetComponent<Light>().intensity += Input.mouseScrollDelta.y * 0.001f;
+
+				else
+					flashLight.GetComponent<Light>().intensity += Input.mouseScrollDelta.y * 0.01f;
+            }
 
 			if (noClip)
 			{
@@ -317,7 +330,10 @@ namespace SuperliminalPracticeMod
 				dynamicInfo += "\nUnlimited Render Distance";
 
 			if (flashLight.activeSelf)
-				dynamicInfo += "\nFlashlight";
+			{
+                dynamicInfo += "\nFlashlight | Intensity: ";
+				dynamicInfo += flashLight.GetComponent<Light>().intensity.ToString("0.000");
+            }
 
 			if (Time.time - this.storeTime <= 1f)
 				dynamicInfo += "\nPosition Stored";
